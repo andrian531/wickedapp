@@ -1,5 +1,5 @@
 const INITIAL_STATE = {
-  pages: null,
+  pages: [],
 };
 
 const applySetPages = (state, action) => ({

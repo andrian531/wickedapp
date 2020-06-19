@@ -97,6 +97,8 @@ class NavBar extends Component {
 
   render() {
     const { translate, menus } = this.props;
+
+    console.log(menus, "menu");
     return (
       <div>
         <div className="main-navbar">
@@ -117,46 +119,19 @@ class NavBar extends Component {
                   {translate("home")}
                 </Link>
               </li>
-              {!this.state.loading &&
-                menus.length > 0 &&
+              {this.state.loading ? (
+                <li>Loading..</li>
+              ) : (
                 menus.map((item) => {
                   return (
                     <li>
                       <Link to={`${process.env.PUBLIC_URL}${item.alias}`}>
-                        {`${item.name}`}
-                        {/* <span className="sub-arrow"></span> */}
+                        {item.name}
                       </Link>
-
-                      {/* <ul className="nav-submenu">
-                        <li>
-                          <Link to={`${process.env.PUBLIC_URL}/`}>
-                            {translate("category_left_sidebar")}
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to={`${process.env.PUBLIC_URL}/`}>
-                            {translate("category_right_sidebar")}
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to={`${process.env.PUBLIC_URL}/`}>
-                            {translate("category_no_sidebar")}
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to={`${process.env.PUBLIC_URL}/`}>
-                            {translate("category_metro")}
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to={`${process.env.PUBLIC_URL}/`}>
-                            {translate("category_full_width")}
-                          </Link>
-                        </li>
-                      </ul> */}
                     </li>
                   );
-                })}
+                })
+              )}
 
               {/* <li>
                 <Link
@@ -568,7 +543,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default compose(
-  withFirebase,
   withTranslate,
+  withFirebase,
   connect(mapStateToProps, mapDispatchToProps)
 )(NavBar);
