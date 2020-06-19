@@ -151,9 +151,13 @@ class Root extends React.Component {
                       component={Register}
                     />
                     <Route
+                      path={`${process.env.PUBLIC_URL}/pages/:slug`}
+                      component={Details}
+                    />
+                    {/* <Route
                       path={`${process.env.PUBLIC_URL}/blogs`}
                       component={BlogPage}
-                    />
+                    /> */}
 
                     {/*Routes For Features (Product Collection) */}
                     <Route

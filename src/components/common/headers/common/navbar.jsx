@@ -17,22 +17,45 @@ class NavBar extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.menus.length) {
+    if (!this.props.pages.length) {
       this.setState({ loading: true });
     }
 
-    this.props.firebase.menus().onSnapshot((snapshot) => {
-      let menus = [];
+    this.props.firebase
+      .pages()
+      .where("parentId", "==", 0)
+      .get()
+      .then((snapshot) => {
+        let promises = [];
+        snapshot.forEach((page) => {
+          promises.push(
+            this.props.firebase
+              .pages()
+              .where("parentId", "==", page.id)
+              .get()
+              .then((childSnap) => {
+                let childsArray = [];
+                childSnap.forEach((child) => {
+                  childsArray.push({
+                    id: child.id,
+                    ...child.data(),
+                  });
+                });
+                return {
+                  id: page.id,
+                  ...page.data(),
+                  childs: childsArray,
+                };
+              })
+          );
+        });
 
-      snapshot.forEach((doc) =>
-        menus.push({
-          ...doc.data(),
-        })
-      );
-      this.props.onSetMenus(menus);
-
-      this.setState({ loading: false });
-    });
+        return Promise.all(promises);
+      })
+      .then((result) => {
+        this.props.onSetPages(result);
+        this.setState({ loading: false });
+      });
   }
 
   componentWillMount() {
@@ -96,9 +119,7 @@ class NavBar extends Component {
   };
 
   render() {
-    const { translate, menus } = this.props;
-
-    console.log(menus, "menu");
+    const { translate, pages } = this.props;
     return (
       <div>
         <div className="main-navbar">
@@ -122,12 +143,33 @@ class NavBar extends Component {
               {this.state.loading ? (
                 <li>Loading..</li>
               ) : (
-                menus.map((item) => {
+                pages.map((item) => {
                   return (
                     <li>
-                      <Link to={`${process.env.PUBLIC_URL}${item.alias}`}>
-                        {item.name}
-                      </Link>
+                      <a
+                        className="nav-link"
+                        href={`${process.env.PUBLIC_URL}/pages/${item.slug}`}
+                      >
+                        {item.alias}{" "}
+                        {item.childs.length > 0 && (
+                          <span className="sub-arrow"></span>
+                        )}
+                      </a>
+                      {item.childs.length > 0 && (
+                        <ul className="nav-submenu">
+                          {item.childs.map((child) => {
+                            return (
+                              <li>
+                                <a
+                                  href={`${process.env.PUBLIC_URL}/pages/${child.slug}`}
+                                >
+                                  {child.alias}
+                                </a>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      )}
                     </li>
                   );
                 })
@@ -533,12 +575,12 @@ class NavBar extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  menus: state.menuState.menus,
+  pages: state.pageState.pages,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onSetMenus: (menus) => {
-    return dispatch({ type: "MENUS_SET", menus });
+  onSetPages: (pages) => {
+    return dispatch({ type: "PAGES_SET", pages });
   },
 });
 
