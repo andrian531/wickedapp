@@ -69,7 +69,7 @@ import Faq from "./components/pages/faq";
 // Blog Pages
 import RightSide from "./components/bookings/cheap-campervan-hire-australia";
 import Details from "./components/bookings/details";
-import BlogPage from "./components/bookings/booking-page";
+import BlogPage from "./components/blogs/blogs";
 
 // Theme Element
 import ElementTitle from "./components/features/theme/element-title";
@@ -149,6 +149,10 @@ class Root extends React.Component {
                     <Route
                       path={`${process.env.PUBLIC_URL}/register`}
                       component={Register}
+                    />
+                    <Route
+                      path={`${process.env.PUBLIC_URL}/blogs`}
+                      component={BlogPage}
                     />
 
                     {/*Routes For Features (Product Collection) */}
@@ -348,10 +352,6 @@ class Root extends React.Component {
                     <Route
                       path={`${process.env.PUBLIC_URL}/bookings/details`}
                       component={Details}
-                    />
-                    <Route
-                      path={`${process.env.PUBLIC_URL}/bookings/booking-page`}
-                      component={BlogPage}
                     />
 
                     {/* <Route exact path="*" component={PageNotFound} /> */}

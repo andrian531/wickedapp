@@ -8,6 +8,7 @@ import filtersReducer from "./filters";
 import wishlistReducer from "./wishlist";
 import compareReducer from "./compare";
 import sessionReducer from "./session";
+import pageReducer from "./pages";
 
 const rootReducer = combineReducers({
   data: productReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   compare: compareReducer,
   Intl,
   sessionState: sessionReducer,
+  pageState: pageReducer,
 });
 
 export default rootReducer;
