@@ -165,7 +165,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "react-image-webp": "^0.7.0",
     "sass-loader": "^7.3.1",
     "webpack": "^4.41.5"
